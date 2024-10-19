@@ -5,7 +5,7 @@
  **********************************************************************************/
 bool crc_dev_t::load(reg_t addr, size_t len, uint8_t *bytes)
 {
-    uint32_t dummy;
+    crc_t dummy;
     /* Make sure the buffer length of size crc_t */
     if(len != sizeof(crc_t))
         return false;
@@ -25,6 +25,11 @@ bool crc_dev_t::load(reg_t addr, size_t len, uint8_t *bytes)
     case MMIO_CRC_SET_POLY:
         memcpy(bytes, &u32_polynomial, sizeof(u32_crc_res));
         break;
+    case MMIO_CRC_SET_DATA_LEN:
+    case MMIO_CRC_DATA:
+        /* Read as Zero (RAZ) */
+        memset(bytes, 0, sizeof(crc_t));
+        break;
     default:
         return false;
     }
@@ -40,18 +45,14 @@ bool crc_dev_t::store(reg_t addr, size_t len, const uint8_t *bytes)
         memcpy(&dummy, bytes, len);
         csr_u.csr_r = dummy & 0xFFFF; // Write lower 16 bits of control register
         break;
-    case MMIO_CRC_SR:
-        memcpy(&dummy, bytes, len);
-        if(dummy & (1 << 0))
-            csr_u.csr_s.s_int = false; // Reset the int status register
-        break;
     case MMIO_CRC_SET_POLY:
         /* Copy polynomial value to polynomial register */
         memcpy(&u32_polynomial, bytes, len);
         break;
     case MMIO_CRC_DATA:
         /* Copy the address of the buffer pointer */
-        memcpy(u8p_data, bytes, sizeof(uint8_t));
+        memcpy(u8p_data, bytes, sizeof(crc_t));
+    case MMIO_CRC_SET_DATA_LEN:
         /* Set data length */
         u32_data_length = (crc_t)len;
         return hw_crc_convert();
@@ -59,11 +60,6 @@ bool crc_dev_t::store(reg_t addr, size_t len, const uint8_t *bytes)
         return false;
     }
     return true;
-}
-
-void crc_dev_t::tick(reg_t UNUSED rtc_ticks)
-{
-    return;
 }
 
 /**********************************************************************************
@@ -77,9 +73,9 @@ bool crc_dev_t::hw_crc_convert()
     crc_t crc;
     crc_t crc_width;
 
-    if (!csr_u.csr_s.c_en || csr_u.csr_s.s_busy)
+    if (!csr_u.csr_s.c_en)
     {
-        /* return if not enable or already busy */
+        /* return if not enable */
         return false;
     }
     /* Raise the busy flag as we will start the conversion */
@@ -93,18 +89,18 @@ bool crc_dev_t::hw_crc_convert()
         break;
     case CRC_POLYNOMIAL_TYPE_16:
         crc = UINT16_MAX;
-        crc_width = 32;
+        crc_width = 16;
         break;
     case CRC_POLYNOMIAL_TYPE_8:
         crc = 0x00;
-        crc_width = 32;
+        crc_width = 8;
         break;
     default:
         break;
     }
     for (size_t i = 0; i < u32_data_length; i++)
     {
-        crc ^= (*((volatile uint8_t *)u8p_data + i) << (crc_width - 8)); // Align input byte with CRC size
+        crc ^= (*(u8p_data + i) << (crc_width - 8)); // Align input byte with CRC size
         for (int j = 0; j < 8; j++)
         {
             if (crc & (1U << (crc_width - 1))) // Check highest bit
