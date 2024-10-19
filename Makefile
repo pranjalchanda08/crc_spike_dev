@@ -7,15 +7,19 @@ endif
 PREFIX ?= $RISCV/
 SRC_DIR := src
 SRCS=$(wildcard $(SRC_DIR)/*.cc)
+INC := $(SRC_DIR)
+TARGET ?= libcrcdev
+BUILD_DIR = build
 
-default: libspikedevices.so
+default: $(BUILD_DIR)/$(TARGET).so
 
-libspikedevices.so: $(SRCS)
-	g++ -L $(RISCV)/lib -Wl,-rpath,$(RISCV)/lib -shared -o $@ -std=c++17 -I $(RISCV)/include -fPIC $^
+$(BUILD_DIR)/$(TARGET).so: $(SRCS)
+	mkdir -p $(BUILD_DIR)
+	g++ -L $(RISCV)/lib -Wl,-rpath,$(RISCV)/lib -shared -o $@ -std=c++17 -I $(INC) -I $(RISCV)/include -fPIC $^
 
 .PHONY: install
-install: libspikedevices.so
-	cp libspikedevices.so $(RISCV)/lib
+install: $(BUILD_DIR)/$(TARGET).so
+	cp $(BUILD_DIR)/$(TARGET).so $(RISCV)/lib
 
 clean:
-	rm -rf *.o *.so
+	rm -rf $(BUILD_DIR)/*.o $(BUILD_DIR)/*.so
