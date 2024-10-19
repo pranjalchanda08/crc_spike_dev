@@ -1,6 +1,6 @@
 RISCV ?=
 PREFIX ?= $RISCV/
-SRC_DIR := src
+SRC_DIR := device
 SRCS=$(wildcard $(SRC_DIR)/*.cc)
 INC := $(SRC_DIR)
 TARGET ?= libcrcdev
