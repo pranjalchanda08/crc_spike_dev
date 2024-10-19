@@ -1,20 +1,14 @@
-ifndef RISCV
-$(error RISCV is unset)
-else
-$(info Running with RISCV=$(RISCV))
-endif
-
+RISCV ?=
 PREFIX ?= $RISCV/
 SRC_DIR := src
 SRCS=$(wildcard $(SRC_DIR)/*.cc)
 INC := $(SRC_DIR)
 TARGET ?= libcrcdev
-BUILD_DIR = build
+BUILD_DIR = out
 
 default: $(BUILD_DIR)/$(TARGET).so
 
 $(BUILD_DIR)/$(TARGET).so: $(SRCS)
-	mkdir -p $(BUILD_DIR)
 	g++ -L $(RISCV)/lib -Wl,-rpath,$(RISCV)/lib -shared -o $@ -std=c++17 -I $(INC) -I $(RISCV)/include -fPIC $^
 
 .PHONY: install
