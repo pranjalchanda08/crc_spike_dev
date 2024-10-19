@@ -5,6 +5,9 @@
         "string_view": "cpp",
         "ranges": "cpp",
         "span": "cpp",
+        "atomic": "cpp",
+        "memory_resource": "cpp",
+        "crc_driver.h": "c"
     },
     "sonarlint.pathToCompileCommands": "out/compile_commands.json"
 }

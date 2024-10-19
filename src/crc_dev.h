@@ -53,9 +53,13 @@ private:
     void raise_intr();
 
 public:
+    crc_dev_t();
     crc_dev_t(abstract_interrupt_controller_t *intctrl, reg_t int_id) : u8p_data(0), interrupt_id(int_id), intctrl(intctrl) {}
     bool load(reg_t addr, size_t len, uint8_t *bytes) override;
     bool store(reg_t addr, size_t len, const uint8_t *bytes) override;
+    void tick(reg_t UNUSED rtc_ticks) override;
 };
+
+extern crc_dev_t crc_module;
 
 #endif /* _CRC_DEV_H_ */
