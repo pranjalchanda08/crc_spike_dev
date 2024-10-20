@@ -12,7 +12,7 @@ $ python3 build.py -h
 ```
 ```sh
 python3 build.py -h
-usage: exec [-h] [-R RVSIM] [-r RV] [-c] [-C] [-b] [-d]
+usage: exec [-h] [-R RVSIM] [-r RV] [-c] [-C] [-b] [-d] [-t]
 
 runs bash scripts as per args
 
@@ -25,17 +25,20 @@ options:
   -C, --check           Check installations
   -b, --build           build the device
   -d, --driver          build the driver
+  -t, --test            build test
 ```
 
 ### Build Example
 ```sh
-$ python3 build.py -R ../riscv-isa-sim/build/install -r ../risc-v-toolchain/bin -Ccbd
+$ python3 build.py -R ../riscv-isa-sim/build/install -r ../risc-v-toolchain/bin -Ccbdt
 
 bear installed: /usr/bin/bear
 make installed: /usr/bin/make
 g++ installed: /usr/bin/g++
 gcc installed: /usr/bin/gcc
-g++ -L /home/pchanda/rv32/riscv-isa-sim/build/install/lib -Wl,-rpath,/home/pchanda/rv32/riscv-isa-sim/build/install/lib -shared -o out/libcrcdev.so -std=c++17 -I device -I /home/pchanda/rv32/riscv-isa-sim/build/install/include -fPIC device/crc_dev.cc
+Building Device plugin from: ./device
+Building Driver from: ./driver
+Building test from: ./test
 ```
 
 ## File Tree
@@ -51,7 +54,10 @@ g++ -L /home/pchanda/rv32/riscv-isa-sim/build/install/lib -Wl,-rpath,/home/pchan
 ├── Makefile
 ├── out
 │   ├── compile_commands.json
+│   ├── crc_test
 │   ├── libcrcdev.so
 │   └── libcrcdriver.o
-└── README.md
+├── README.md
+└── test
+    └── test_drv.c
 ```

@@ -17,12 +17,18 @@ typedef uint8_t bool;
 #define CRC_EN_MASK (1 << 0)
 #define CRC_BUSY_MASK (1 << 2)
 
-void crc_set_poly(uint32_t poly);
+typedef enum
+{
+    CRC_POLYNOMIAL_TYPE_32 = 0,
+    CRC_POLYNOMIAL_TYPE_16,
+    CRC_POLYNOMIAL_TYPE_8,
+} crc_poly_t;
+
+void crc_set_poly(uint32_t poly, crc_poly_t type);
 void crc_get_poly(uint32_t *poly);
 void crc_dev_en(bool en);
 uint32_t crc_get_res();
-void crc_set_data_ptr(uint8_t *data_ptr);
-void crc_set_data_len(uint32_t data_len);
+void crc_set_data(uint8_t *data_ptr, uint32_t len);
 bool crc_is_busy();
 
 #endif /* _CRC_DRIVER_H_ */

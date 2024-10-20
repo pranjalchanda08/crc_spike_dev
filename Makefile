@@ -9,7 +9,7 @@ BUILD_DIR = out
 default: $(BUILD_DIR)/$(TARGET).so
 
 $(BUILD_DIR)/$(TARGET).so: $(SRCS)
-	g++ -L $(RISCV)/lib -Wl,-rpath,$(RISCV)/lib -shared -o $@ -std=c++17 -I $(INC) -I $(RISCV)/include -fPIC $^
+	@ g++ -L $(RISCV)/lib -Wl,-rpath,$(RISCV)/lib -shared -o $@ -std=c++17 -I $(INC) -I $(RISCV)/include -fPIC $^
 
 .PHONY: install
 install: $(BUILD_DIR)/$(TARGET).so
