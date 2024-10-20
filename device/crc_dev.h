@@ -7,7 +7,7 @@
 #include <fesvr/term.h>
 #include <fdt/libfdt.h>
 
-#define CRC_DEV_MMIO_BASE 0x4535FF00
+#define CRC_DEV_MMIO_BASE 0x20001000
 
 #define MMIO_CRC_CR CRC_DEV_MMIO_BASE + 0x0            // W Access to Control Register
 #define MMIO_CRC_SR CRC_DEV_MMIO_BASE + 0x4            // R/W Access Status register; only intr flag is writable to clear it post serving of interrupt
@@ -54,7 +54,7 @@ private:
 
 public:
     crc_dev_t();
-    crc_dev_t(abstract_interrupt_controller_t *intctrl, reg_t int_id) : u8p_data(0), interrupt_id(int_id), intctrl(intctrl) {}
+    crc_dev_t(abstract_interrupt_controller_t *intctrl, reg_t int_id);
     bool load(reg_t addr, size_t len, uint8_t *bytes) override;
     bool store(reg_t addr, size_t len, const uint8_t *bytes) override;
     void tick(reg_t UNUSED rtc_ticks) override;

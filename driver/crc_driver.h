@@ -5,7 +5,7 @@
 
 typedef uint8_t bool;
 
-#define CRC_DEV_MMIO_BASE 0x4535FF00
+#define CRC_DEV_MMIO_BASE 0x00
 
 #define MMIO_CRC_CR CRC_DEV_MMIO_BASE + 0x0            // W Access to Control Register
 #define MMIO_CRC_SR CRC_DEV_MMIO_BASE + 0x4            // R/W Access Status register; only intr flag is writable to clear it post serving of interrupt

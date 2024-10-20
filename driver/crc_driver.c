@@ -30,7 +30,7 @@ uint32_t crc_get_res()
     return MMIO32(MMIO_CRC_RESULT);
 }
 
-void crc_set_data_ptr(uint8_t *data_ptr, uint32_t len)
+void crc_set_data(uint8_t *data_ptr, uint32_t len)
 {
     MMIO32(MMIO_CRC_DATA) = (uint32_t)(uintptr_t)data_ptr;
     MMIO32(MMIO_CRC_SET_DATA_LEN) = len;
