@@ -56,8 +56,16 @@ Building test from: ./test
 │   ├── compile_commands.json
 │   ├── crc_test
 │   ├── libcrcdev.so
-│   └── libcrcdriver.o
+│   ├── libcrcdriver.o
+│   └── test.dtb
 ├── README.md
 └── test
-    └── test_drv.c
+    ├── test_drv.c
+    └── test.dts
+```
+
+## Runnig the test
+
+```sh
+
 ```

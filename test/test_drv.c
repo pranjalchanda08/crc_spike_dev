@@ -1,5 +1,4 @@
-#include "stdio.h"
-#include "stdlib.h"
+#include "mtrap.h"
 #include "stdint.h"
 #include "crc_driver.h"
 
@@ -22,9 +21,9 @@ uint32_t software_crc32(uint8_t* data, size_t len, uint32_t poly) {
     return crc ^ 0xFFFFFFFF;
 }
 
-int main()
+int test_crc_main()
 {
-    printf("*****STARTING Test******\n");
+    printm("*****STARTING Test******\n");
 
     /* Enable CRC device */
     crc_dev_en(1);
@@ -34,7 +33,7 @@ int main()
 
     /* Gnerate 5 random numbers */
     for (size_t i = 0; i < BUFFER_LEN; i++)
-        buffer[i] = rand();
+        buffer[i] = i+9;
 
     /* Set data length starts the conversion as well */
     crc_set_data((uint8_t*)&buffer, BUFFER_LEN);
@@ -47,12 +46,16 @@ int main()
     /* Perform correspondig SW CRC calculations */
     uint32_t sw_crc = software_crc32((uint8_t*)&buffer, BUFFER_LEN, CRC_POLY);
 
-    printf("HW CRC result: 0x%lx\n", hw_crc);
-    printf("SW CRC result: 0x%lx\n", sw_crc);
-    printf("TEST Result: %s\n", hw_crc == sw_crc ? "PASS" : "FAIL");
+    printm("HW CRC result: 0x%x\n", hw_crc);
+    printm("SW CRC result: 0x%x\n", sw_crc);
+    printm("TEST Result: %s\n", hw_crc == sw_crc ? "PASS" : "FAIL");
 
-    printf("*****ENDING Test******\n");
+    printm("*****ENDING Test******\n");
     return 0;
     
 }
 
+int main()
+{
+    test_crc_main();
+}

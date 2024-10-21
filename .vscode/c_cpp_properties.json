@@ -4,7 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/../riscv-isa-sim/build/install/**"
+                "${workspaceFolder}/tools/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
