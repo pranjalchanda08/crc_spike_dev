@@ -61,7 +61,7 @@ if __name__ == '__main__':
         print(f"Building test from: ./test")
         os.system("mkdir -p out;dtc -I dts -O dtb test/test.dts > out/test.dtb")
         os.system("cd tools/spike-divices;" \
-            f"export RISCV={args.rvsim};" \
+            f"export RISCV={os.path.abspath(args.rvsim)};" \
             "make -j8;cp libspikedevices.so ../../out/")
         
         os.system(  f"cp driver/* test/*.c tools/riscv-pk/machine/.;" \
