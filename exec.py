@@ -4,6 +4,7 @@ import shutil
 
 dependent_prog = [
     ('bear', 'bear'),
+    ('dtc', 'device-tree-compiler'),
     ('make', 'make'),
     ('g++', 'build-essential'),
     ('gcc', 'build-essential')
@@ -45,7 +46,7 @@ if __name__ == '__main__':
                     "bash ci-tests/build-spike")
         os.system("git clone https://github.com/ucb-bar/spike-devices.git tools/spike-divices;" \
             "cd tools/spike-divices;" \
-            f"export RISCV={args.rvsim};" \
+            f"export RISCV={os.path.abspath(args.rvsim)};" \
             "make -j8;cp libspikedevices.so ../../out/")
         
     if args.build:
@@ -62,6 +63,7 @@ if __name__ == '__main__':
         os.system("cd tools/spike-divices;" \
             f"export RISCV={args.rvsim};" \
             "make -j8;cp libspikedevices.so ../../out/")
+        
         os.system(  f"cp driver/* test/*.c tools/riscv-pk/machine/.;" \
                     "cd tools/riscv-pk;" \
                     "mkdir -p build; cd build;" \

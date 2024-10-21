@@ -74,28 +74,27 @@ Building test from: ./test
 ## Runnig the test
 
 ```sh
-python3 exec.py -e
+$ python3 exec.py -e
 **************Executing simulation***************
 tools/riscv-isa-sim/build/install/bin/spike --extlib out/libspikedevices.so --device sifive_uart --extlib out/libcrcdev.so --device crc_dev --dtb=out/test.dtb tools/riscv-pk/build/pk
 Found uart at 10000000
 Found crc at 20001000
 Initialising CRC
 *****STARTING Test******
-CRC Load: 0x0
-CRC Store: 0x0 0x1
-CRC Store: 0xc 0x66736628
-CRC Load: 0x0
-CRC Store: 0x0 0x1
-CRC Store: 0x10 0x80018100
-CRC Store: 0x14 0x5
-hw_crc_convert crc: c216975b
-CRC Load: 0x4
-CRC Load: 0x8
+[D]: CRC Load: 0x0
+[D]: CRC Store: 0x0 0x1
+[D]: CRC Store: 0xc 0x66736628
+[D]: CRC Load: 0x0
+[D]: CRC Store: 0x0 0x1
+[D]: CRC Store: 0x10 0x80018100
+[D]: CRC Store: 0x14 0x5
+[D]: hw_crc_convert crc: c216975b
+[D]: CRC Load: 0x4
+[D]: CRC Load: 0x8
 HW CRC result: 0xc216975b
 SW CRC result: 0xc216975b
 TEST Result: PASS
 *****ENDING Test******
-tell me what ELF to load!
 ```
 
 ### Approach to execute

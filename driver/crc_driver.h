@@ -1,10 +1,19 @@
+/***********************************************************************************
+ * @author: pranjalchanda08@gmail.com [Pranjal Chanda]
+ * @file: crc_driver.h
+ * @brief:  Interface driver declaration for CRC Device
+ **********************************************************************************/
+
 #ifndef _CRC_DRIVER_H_
 #define _CRC_DRIVER_H_
-
+/**********************************************************************************
+ * INCLUDES
+ **********************************************************************************/
 #include <inttypes.h>
 
-typedef uint8_t bool;
-
+/**********************************************************************************
+ * DEFINES
+ **********************************************************************************/
 #define CRC_DEV_MMIO_BASE 0x20001000
 
 #define MMIO_CRC_CR CRC_DEV_MMIO_BASE + 0x0            // W Access to Control Register
@@ -17,6 +26,11 @@ typedef uint8_t bool;
 #define CRC_EN_MASK (1 << 0)
 #define CRC_BUSY_MASK (1 << 2)
 
+/**********************************************************************************
+ * TYPEDEFS
+ **********************************************************************************/
+typedef uint8_t bool;
+
 typedef enum
 {
     CRC_POLYNOMIAL_TYPE_32 = 0,
@@ -24,6 +38,9 @@ typedef enum
     CRC_POLYNOMIAL_TYPE_8,
 } crc_poly_t;
 
+/**********************************************************************************
+ * FUNCTION DECLARATIONS
+ **********************************************************************************/
 void crc_set_poly(uint32_t poly, crc_poly_t type);
 void crc_get_poly(uint32_t *poly);
 void crc_dev_en(bool en);

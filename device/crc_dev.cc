@@ -1,3 +1,12 @@
+/***********************************************************************************
+ * @author: pranjalchanda08@gmail.com [Pranjal Chanda]
+ * @file: crc_dev.cc
+ * @brief:  Definations of CRC Device
+ **********************************************************************************/
+
+/**********************************************************************************
+ * INCLUDES
+ **********************************************************************************/
 #include "crc_dev.h"
 #include <iostream>
 #include "stdio.h"
@@ -12,18 +21,19 @@ crc_dev_t::crc_dev_t()
     std::cout << "Initialising CRC" << std::endl;
 }
 
-crc_dev_t::crc_dev_t(abstract_interrupt_controller_t *intctrl, reg_t int_id) : u8p_data(0), interrupt_id(int_id), intctrl(intctrl) {
+crc_dev_t::crc_dev_t(abstract_interrupt_controller_t *intctrl, reg_t int_id) : u8p_data(0), interrupt_id(int_id), intctrl(intctrl)
+{
     crc_dev_t();
 }
 
-crc_dev_t :: crc_dev_t(sim_t * sim, abstract_interrupt_controller_t *intctrl, reg_t int_id) : sim_ptr(sim)
+crc_dev_t ::crc_dev_t(sim_t *sim, abstract_interrupt_controller_t *intctrl, reg_t int_id) : sim_ptr(sim)
 {
     crc_dev_t(intctrl, int_id);
 }
 
 bool crc_dev_t::load(reg_t addr, size_t len, uint8_t *bytes)
 {
-    printf("CRC Load: 0x%lx\n", addr);
+    printf("[D]: CRC Load: 0x%lx\n", addr);
     uint32_t dummy;
     /* Make sure the buffer length of size crc_t */
     if (len != sizeof(crc_t))
@@ -55,7 +65,7 @@ bool crc_dev_t::load(reg_t addr, size_t len, uint8_t *bytes)
 
 bool crc_dev_t::store(reg_t addr, size_t len, const uint8_t *bytes)
 {
-    printf("CRC Store: 0x%lx 0x%x\n", addr, PTR_ACCESS(bytes));
+    printf("[D]: CRC Store: 0x%lx 0x%x\n", addr, PTR_ACCESS(bytes));
     crc_t dummy;
     switch (addr)
     {
@@ -96,11 +106,11 @@ bool crc_dev_t::hw_crc_convert()
 {
     crc_t crc = UINT32_MAX;
     crc_t crc_width;
-    
+
     if (!csr_u.csr_s.c_en || csr_u.csr_s.s_busy)
     {
         /* return if not enable or already busy */
-        printf("hw_crc_convert fail: %d, %d\n", csr_u.csr_s.c_en, csr_u.csr_s.s_busy);
+        printf("[D]: hw_crc_convert fail: %d, %d\n", csr_u.csr_s.c_en, csr_u.csr_s.s_busy);
         return false;
     }
     /* Raise the busy flag as we will start the conversion */
@@ -121,13 +131,13 @@ bool crc_dev_t::hw_crc_convert()
         crc_width = 8;
         break;
     default:
-        printf("hw_crc_convert default %d\n", csr_u.csr_s.c_poly_type);
+        printf("[D]: hw_crc_convert default %d\n", csr_u.csr_s.c_poly_type);
         return false;
     }
 
-    uint8_t temp; 
+    uint8_t temp;
     uint32_t temp_reg = u8p_data;
-    
+
     for (size_t i = 0; i < u32_data_length; i++)
     {
         sim_ptr->mmio_load(temp_reg++, 1, &temp);
@@ -140,10 +150,10 @@ bool crc_dev_t::hw_crc_convert()
                 crc >>= 1;
         }
     }
-    crc ^= ((1UL << crc_width ) - 1); // Keep CRC constrained to its size
+    crc ^= ((1UL << crc_width) - 1); // Keep CRC constrained to its size
 
     u32_crc_res = crc;
-    printf("hw_crc_convert crc: %x\n", crc);
+    printf("[D]: hw_crc_convert crc: %x\n", crc);
     /* Release busy flag */
     csr_u.csr_s.s_busy = false;
     /* Raise interrupt */
@@ -188,7 +198,7 @@ crc_dev_t *crc_dev_parse_from_fdt(const void *fdt, const sim_t *sim, reg_t *base
     if (fdt_parse_crc_dev(fdt, base, "crc_dev,crc0") == 0)
     {
         printf("Found crc at %lx\n", *base);
-        return new crc_dev_t((sim_t*)sim, sim->get_intctrl(), 2);
+        return new crc_dev_t((sim_t *)sim, sim->get_intctrl(), 2);
     }
     else
     {

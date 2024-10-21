@@ -54,7 +54,14 @@
         "sstream": "cpp",
         "stdexcept": "cpp",
         "streambuf": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "any": "c",
+        "charconv": "c",
+        "chrono": "c",
+        "ratio": "c",
+        "scoped_allocator": "c",
+        "variant": "c",
+        "complex": "c"
     },
     "sonarlint.pathToCompileCommands": "out/compile_commands.json"
 }
