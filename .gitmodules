@@ -1,0 +1,14 @@
+[submodule "tools/risc-v-toolchain"]
+	path = tools/risc-v-toolchain
+	url = https://github.com/VisorFolks/risc-v-toolchain.git
+[submodule "tools/riscv-pk"]
+	path = tools/riscv-pk
+	url = https://github.com/pranjalchanda08/riscv-pk
+	branch = crc_device_test
+[submodule "tools/riscv-isa-sim"]
+	path = tools/riscv-isa-sim
+	url = https://github.com/pranjalchanda08/riscv-isa-sim
+	branch = crc_device
+[submodule "tools/spike-divices"]
+	path = tools/spike-divices
+	url = https://github.com/ucb-bar/spike-devices.git

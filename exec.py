@@ -36,16 +36,12 @@ if __name__ == '__main__':
     args = argp.parse_args()
     if args.clean:
         os.system("rm -r out")
-    if args.get_tc:
-        os.system( "git clone https://github.com/VisorFolks/risc-v-toolchain.git tools/risc-v-toolchain")
     if args.check:
         check_bin_installed()
-        os.system("git clone -q -b crc_device_test https://github.com/pranjalchanda08/riscv-pk tools/riscv-pk;")
-        os.system("git clone -b https://github.com/pranjalchanda08/riscv-isa-sim tools/riscv-isa-sim;" \
-                    "cd tools/riscv-isa-sim;"
+        os.system("git submodule update --init")
+        os.system( "cd tools/riscv-isa-sim;"
                     "bash ci-tests/build-spike")
-        os.system("git clone https://github.com/ucb-bar/spike-devices.git tools/spike-divices;" \
-            "cd tools/spike-divices;" \
+        os.system("cd tools/spike-divices;" \
             f"export RISCV={os.path.abspath(args.rvsim)};" \
             "make -j8;cp libspikedevices.so ../../out/")
         
@@ -59,10 +55,12 @@ if __name__ == '__main__':
                   riscv64-unknown-elf-gcc -c driver/crc_driver.c -I driver -o out/libcrcdriver.o")
     if args.test:
         print(f"Building test from: ./test")
-        os.system("mkdir -p out;dtc -I dts -O dtb test/test.dts > out/test.dtb")
+        os.system("mkdir -p out;"\
+            "dtc -I dts -O dtb test/test.dts > out/test.dtb")
         os.system("cd tools/spike-divices;" \
             f"export RISCV={os.path.abspath(args.rvsim)};" \
-            "make -j8;cp libspikedevices.so ../../out/")
+            "make -j8;"\
+            "cp libspikedevices.so ../../out/")
         
         os.system(  f"cp driver/* test/*.c tools/riscv-pk/machine/.;" \
                     "cd tools/riscv-pk;" \
