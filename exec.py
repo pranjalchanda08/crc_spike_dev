@@ -40,7 +40,7 @@ if __name__ == '__main__':
     if args.check:
         check_bin_installed()
         os.system("git clone -q -b crc_device_test https://github.com/pranjalchanda08/riscv-pk tools/riscv-pk;")
-        os.system("git clone -b crc_device https://github.com/pranjalchanda08/riscv-isa-sim tools/riscv-isa-sim;" \
+        os.system("git clone -b https://github.com/pranjalchanda08/riscv-isa-sim tools/riscv-isa-sim;" \
                     "cd tools/riscv-isa-sim;"
                     "bash ci-tests/build-spike")
         os.system("git clone https://github.com/ucb-bar/spike-devices.git tools/spike-divices;" \
@@ -58,7 +58,10 @@ if __name__ == '__main__':
                   riscv64-unknown-elf-gcc -c driver/crc_driver.c -I driver -o out/libcrcdriver.o")
     if args.test:
         print(f"Building test from: ./test")
-        os.system("dtc -I dts -O dtb test/test.dts > out/test.dtb")
+        os.system("mkdir -p out;dtc -I dts -O dtb test/test.dts > out/test.dtb")
+        os.system("cd tools/spike-divices;" \
+            f"export RISCV={args.rvsim};" \
+            "make -j8;cp libspikedevices.so ../../out/")
         os.system(  f"cp driver/* test/*.c tools/riscv-pk/machine/.;" \
                     "cd tools/riscv-pk;" \
                     "mkdir -p build; cd build;" \
@@ -67,5 +70,6 @@ if __name__ == '__main__':
                     "make -j8")
     if args.run_sim:
         print(f"**************Executing simulation***************")
+        print(f"{args.rvsim}/bin/spike --extlib out/libspikedevices.so --device sifive_uart --extlib out/libcrcdev.so --device crc_dev --dtb=out/test.dtb tools/riscv-pk/build/pk")
         os.system(f"{os.path.abspath(args.rvsim)}/bin/spike --extlib out/libspikedevices.so --device sifive_uart --extlib out/libcrcdev.so --device crc_dev --dtb=out/test.dtb tools/riscv-pk/build/pk")
         
